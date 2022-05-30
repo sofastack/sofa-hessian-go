@@ -343,10 +343,10 @@ bin/hessian decode 43302c636f6d2e616c697061792e736f66612e7270632e636f72652e72657
 ```
 ─λ make bench
 go test -benchmem -run="^$" -bench ^Benchmark ./...
-?   	gitlab.alipay-inc.com/sofa-go/sofa-hessian-go/sofahessianv1	[no test files]
+?   	github.com/sofastack/sofa-hessian-go/sofahessianv1	[no test files]
 goos: darwin
 goarch: amd64
-pkg: gitlab.alipay-inc.com/sofa-go/sofa-hessian-go/sofahessianv2
+pkg: github.com/sofastack/sofa-hessian-go/sofahessianv2
 BenchmarkDecodeBinary-8             	  558362	      2180 ns/op	15041.85 MB/s	       0 B/op	       0 allocs/op
 BenchmarkDecodeBool-8               	33203718	        35.8 ns/op	  27.91 MB/s	       0 B/op	       0 allocs/op
 BenchmarkDecodeDate-8               	14283891	        73.1 ns/op	 123.15 MB/s	       0 B/op	       0 allocs/op
@@ -372,8 +372,8 @@ BenchmarkEncodeString-8             	     716	   1662180 ns/op	 160.43 MB/s	    
 BenchmarkEncodeAndDecodeJSON-8      	   51471	     22695 ns/op	  44.68 MB/s	    2913 B/op	      37 allocs/op
 BenchmarkEncodeAndDecodeHessianV2-8   	  139880	      7979 ns/op	  56.77 MB/s	    3104 B/op	      57 allocs/op
 PASS
-ok  	gitlab.alipay-inc.com/sofa-go/sofa-hessian-go/sofahessianv2	34.443s
-?   	gitlab.alipay-inc.com/sofa-go/sofa-hessian-go/javaobject	[no test files]
+ok  	github.com/sofastack/sofa-hessian-go/sofahessianv2	34.443s
+?   	github.com/sofastack/sofa-hessian-go/javaobject	[no test files]
 ```
 
 # TODO

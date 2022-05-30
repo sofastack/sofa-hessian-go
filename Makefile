@@ -61,7 +61,7 @@ bench:
 .PHONY: build-fuzz
 ## build fuzz program
 build-fuzz:
-	go-fuzz-build -tags fuzz gitlab.alipay-inc.com/sofa-go/sofa-hessian-go/sofahessian
+	go-fuzz-build -tags fuzz github.com/sofastack/sofa-hessian-go/sofahessian
 
 .PHONY: fuzz
 ## start fuzz
