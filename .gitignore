@@ -1,0 +1,10 @@
+*.out
+*.log
+*.test
+/bin
+/fuzz/suppressions
+/fuzz/crashers
+*.idea
+*.zip
+/hessian/*.zip
+/fuzz

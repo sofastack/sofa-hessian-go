@@ -1,0 +1,26 @@
+{
+    "$class": "com.alipay.sofa.rpc.core.request.SofaRequest",
+    "$": {
+        "targetAppName": "",
+        "methodName": "sayHello",
+        "targetServiceUniqueName": "HelloService:1.0",
+        "requestProps": {
+            "protocol": "bolt",
+            "rpc_trace_context": {
+                "sofaPenAttrs": "",
+                "sofaRpcId": "0",
+                "samp": "false",
+                "sysPenAttrs": "",
+                "sofaCallerIdc": "",
+                "sofaCallerIp": "",
+                "sofaTraceId": "0a0fe8631571046378758100186220",
+                "sofaCallerZone": "",
+                "sofaCallerApp": ""
+            }
+        },
+        "methodArgSigs": [
+            "java.lang.String",
+            "long"
+        ]
+    }
+}

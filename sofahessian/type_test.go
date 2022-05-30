@@ -1,0 +1,107 @@
+// nolint
+// Copyright 20xx The Alipay Authors.
+//
+// @authors[0]: bingwu.ybw(bingwu.ybw@antfin.com|detailyang@gmail.com)
+// @authors[1]: robotx(robotx@antfin.com)
+//
+// *Legal Disclaimer*
+// Within this source code, the comments in Chinese shall be the original, governing version. Any comment in other languages are for reference only. In the event of any conflict between the Chinese language version comments and other language version comments, the Chinese language version shall prevail.
+// *法律免责声明*
+// 关于代码注释部分，中文注释为官方版本，其它语言注释仅做参考。中文注释可能与其它语言注释存在不一致，当中文注释与其它语言注释存在不一致时，请以中文注释为准。
+//
+//
+
+package sofahessian
+
+import (
+	"bufio"
+	"bytes"
+	"encoding/hex"
+	"github.com/kr/pretty"
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+
+func TestJavaMap(t *testing.T) {
+	jm := NewJavaMap("cc", map[interface{}]interface{}{
+		"a": 1,
+		"b": 1,
+	})
+
+	dst, err := EncodeToHessian4V2(NewEncodeContext(), nil, jm)
+	require.Nil(t, err)
+
+	z, err := DecodeHessian4V2(NewDecodeContext(), bufio.NewReader(bytes.NewReader(dst)))
+	require.Nil(t, err)
+	jz, ok := z.(*JavaMap)
+	require.True(t, ok)
+	require.Equal(t, "cc", jz.class)
+	require.Equal(t, int64(1), jz.m["a"])
+	require.Equal(t, int64(1), jz.m["b"])
+}
+
+func TestType(t *testing.T) {
+	jl := JavaList{class: "a", value: []interface{}{1}}
+	require.Equal(t, "a", jl.GetJavaClassName())
+	require.Equal(t, []interface{}{1}, jl.GetValue())
+
+	jm := JavaMap{class: "a", m: map[interface{}]interface{}{}}
+	require.Equal(t, "a", jm.GetJavaClassName())
+	require.Equal(t, map[interface{}]interface{}{}, jm.GetValue())
+
+	jo := JavaObject{class: "a", names: []string{"a"}, values: []interface{}{1}}
+	require.Equal(t, "a", jo.GetJavaClassName())
+	require.Equal(t, 1, jo.Len())
+	require.Equal(t, "a", jo.GetKey(0))
+	require.Equal(t, 1, jo.GetValue(0))
+}
+
+const byteStr = "4fb4636f6d2e616c697061792e636f6d6d6f6e2e6576656e742e556e69666f726d4576656e74b30b6c6f63616c54784d6f6465116c6f63616c44617461736f757263654964166c6f63616c4576656e7444617461536f75726365496402696405746f706963096576656e74436f6465096576656e7454797065096576656e744e616d650d7472616e73616374696f6e616c126576656e74547853796e4c697374656e657208736572766572496408636c69656e74497009636c69656e744d616308636c69656e7449640d636c69656e74504349444d61630e636c69656e7450434944487769640e636c69656e7450434944477569640f756d69644861726456657273696f6e0b756d6964537973496e666f0c756d696448617264496e666f0c756d6964536f6674496e666f07756d69645249440f756d6964536f667456657273696f6e0973657373696f6e49640474784964087072696f726974790f73656e644f6e63654d6573736167650863726f737349444308686f73744e616d65167468726f77457863657074696f6e4f6e4661696c656408676d744f636375720c6576656e745061796c6f6164097072696e636970616c0a70726f70657274696573116d756c746954656e616e745569644d61706f9046000053002031663162356430386337376134333963353134616230633335616136346436310d54505f525f435553544f4d45521545435f43414348455f494e4e45525f4348414e47454e4e464e5300217a7064636f72652d342e677a3030622e737461626c652e616c697061792e6e65744e4e4e4e4e4e4e4e4e4e4e4e4e4e9546465300217a7064636f72652d342e677a3030622e737461626c652e616c697061792e6e657454640000017a8b8baeb34fc83e636f6d2e616c697061792e64746f2e70726f647563742e616464702e7265706c69636174696f6e2e446174615265706c69636174696f6e436f6e7465787493146461746142617365496e737472756374696f6e731074616972496e737472756374696f6e730d62697a50726f706572746965736f91566e007a566e014fc837636f6d2e616c697061792e64746f2e70726f647563742e616464702e7265706c69636174696f6e2e54616972496e737472756374696f6e9a0b646174614f7065726174650c6d657461646174614e616d650967726f75704e616d65096e616d6573706163650b617070546169724e616d65036b65790776657273696f6e0a65787069726554696d650a6d6f6469667954696d650576616c75656f9208746169725f7075744e4e4e4e53003a6c6f6164546573745f30312350524f445f4d41524b23414e54475732434e23573230313031303030303030303233373131343923312e3030303190c92c4c0047cd886f7077344e7a4d7a4e4d7400146a6176612e7574696c2e50726f7065727469657319534f46415f554e49464f524d5f434f4e544558545f494e464f5302747b226261746368223a66616c73652c2263616c6c6565223a7b22736964223a226576656e7449643166316235643038633737613433396335313461623063333561613634643631222c2274696d656f7574223a222d222c2276657273696f6e223a22227d2c2263616c6c6572223a7b226170704e616d65223a22222c22686f73744e616d65223a227a7064636f72652d342e677a3030622e737461626c652e616c697061792e6e6574222c226970223a223130302e36392e3231332e3338222c227265717565737454696d65223a22323032312d30372d30392032313a35333a34353a313339227d2c22636f756e74223a302c2266726f6d5f6d7367223a747275652c226964656d706f74656e74223a66616c73652c22696e646578223a302c22696e766f6b654964223a2236623334656332332d303834302d343761652d383838362d6665643136376663343166665f343835383738222c22696e766f6b6554797065223a226d7367222c22697047726f7570223a22222c226c617965725f707265666978223a225f343835383738222c2270726f746f636f6c223a22746370222c2272656164223a66616c73652c227365727669636550726f706572696573223a7b7d2c2273657276696365556e697175654e616d65223a22222c2274617267657455524c223a22222c2276657273696f6e223a22342e302e30222c22776562496e666f223a7b22627573696e6573735f747970655f6964223a22222c2266726f6d5f6d7367223a66616c73652c22697047726f7570223a22222c226a73657373696f6e4964223a22222c2270616765506172616d73223a22222c227061676555726c223a22222c22756964223a22227d7d7a4d7a"
+
+type UniformEvent struct {
+	Id         string            `hessian:"id"`
+	Topic      string            `hessian:"topic"`
+	EventCode  string            `hessian:"eventCode"`
+	Properties map[string]string `hessian:"properties"`
+	HostName   string            `hessian:"hostName"`
+	Payload    *JavaObject       `hessian:"eventPayload"`
+}
+
+func (u UniformEvent) GetJavaClassName() string {
+	return "com.alipay.common.event.UniformEvent"
+}
+
+func TestDecodeHessian3V2(t *testing.T) {
+
+	cr := NewClassRegistry()
+	cr.RegisterJavaClass(UniformEvent{})
+	ctx := NewDecodeContext().SetVersion(Hessian3xV2).SetTracer(NewDummyTracer()).SetClassRegistry(cr)
+	byteArr, err := hex.DecodeString(byteStr)
+	if err != nil {
+		t.Error(err)
+	}
+	y1, err := DecodeHessian3V2(ctx, bufio.NewReader(bytes.NewReader(byteArr)))
+	if err != nil {
+		t.Error(err)
+	}
+
+	eCtx := NewEncodeContext().SetVersion(Hessian3xV2).
+		SetTracer(NewDummyTracer()).
+		SetTyperefs(NewEncodeTyperefs())
+
+	v2, err := EncodeHessian3V2(eCtx, y1)
+	if err != nil {
+		t.Error(err)
+	}
+
+	pretty.Println(hex.EncodeToString(v2))
+
+	ctx2 := NewDecodeContext().SetVersion(Hessian3xV2).SetTracer(NewDummyTracer()).SetClassRegistry(cr)
+	reader := bufio.NewReader(bytes.NewReader(v2))
+	y2, err := DecodeHessian3V2(ctx2, reader)
+	if err != nil {
+		t.Error(err)
+	}
+	require.Equal(t, y1, y2)
+}
